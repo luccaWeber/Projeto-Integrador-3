@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeorm';
 
 @Entity('perfil_mentor')
 export class Mentor {
@@ -10,9 +10,6 @@ export class Mentor {
 
   @Column('text', { array: true, nullable: true })
   areas_especializacao: string[];
-
-  @Column({ nullable: true })
-  disponibilidade: string;
 
   @Column({ nullable: true })
   nivel_experiencia: string;
@@ -27,16 +24,7 @@ export class Mentor {
   experiencia_profissional: string;
 
   @Column({ nullable: true })
-  formacao: string;
-
-  @Column('numeric', { nullable: true })
-  preco: number;
-
-  @Column({ nullable: true })
-  formato: string;
-
-  @Column('numeric', { nullable: true })
-  duracao_mentoria: number;
+  fomacao: string;
 
   @Column({ nullable: true })
   linkedin: string;
@@ -46,4 +34,5 @@ export class Mentor {
 
   @Column({ nullable: true })
   portifolio: string;
+
 }

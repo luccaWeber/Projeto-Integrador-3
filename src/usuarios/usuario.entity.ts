@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Mentoria } from 'src/mentorias/mentoria.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany} from 'typeorm';
 
 @Entity('usuarios')
 export class Usuario {
@@ -28,4 +29,11 @@ export class Usuario {
 
   @Column({ type: 'timestamp' })
   created_at: Date;
+
+  @OneToMany(() => Mentoria, (mentoria) => mentoria.mentor)
+  mentoriasComoMentor: Mentoria[];
+
+  @OneToMany(() => Mentoria, (mentoria) => mentoria.aluno)
+  mentoriasComoAluno: Mentoria[];
+
 }
