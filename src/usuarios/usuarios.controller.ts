@@ -7,9 +7,11 @@ import {
   UseGuards,
   UnauthorizedException,
   ConflictException,
+  Patch,
 } from '@nestjs/common';
 import { UsuariosService } from './usuarios.service';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
+import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { PerfilUsuarioResponseDto } from './dto/perfil-usuario-response.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { AuthService } from 'src/auth/auth.service';
@@ -100,6 +102,37 @@ export class UsuariosController {
       success: true,
       statusCode: 200,
       message: 'Perfil do usuário autenticado',
+      data: usuarioDto,
+    });
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch('perfil')
+  async updatePerfil(
+    @Request() req,
+    @Body() dto: UpdateUsuarioDto,
+  ): Promise<ResponseDto<PerfilUsuarioResponseDto>> {
+    const usuarioId = req.user?.id;
+
+    if (!usuarioId) {
+      throw new UnauthorizedException('Token JWT inválido ou ausente');
+    }
+
+    const usuarioAtualizado = await this.usuariosService.update(usuarioId, dto);
+
+    const usuarioDto: PerfilUsuarioResponseDto = {
+      id: usuarioAtualizado.id,
+      nome: usuarioAtualizado.nome,
+      email: usuarioAtualizado.email,
+      tipo_usuario: usuarioAtualizado.tipo_usuario,
+      foto: usuarioAtualizado.foto,
+      biografia: usuarioAtualizado.biografia,
+    };
+
+    return new ResponseDto({
+      success: true,
+      statusCode: 200,
+      message: 'Perfil do usuário atualizado com sucesso',
       data: usuarioDto,
     });
   }

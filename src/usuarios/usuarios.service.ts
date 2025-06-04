@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Usuario } from './usuario.entity';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
+import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 
 @Injectable()
 export class UsuariosService {
@@ -31,6 +32,14 @@ export class UsuariosService {
 
   async findById(id: number): Promise<Usuario | null> {
     return this.usuariosRepository.findOne({ where: { id } });
-  }  
+  }
 
+  async update(id: number, data: UpdateUsuarioDto): Promise<Usuario> {
+    await this.usuariosRepository.update(id, data);
+    const updatedUsuario = await this.findById(id);
+    if (!updatedUsuario) {
+      throw new Error('Usuário não encontrado após atualização');
+    }
+    return updatedUsuario;
+  }
 }
