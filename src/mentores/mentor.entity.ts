@@ -24,7 +24,7 @@ export class Mentor {
   experiencia_profissional: string;
 
   @Column({ nullable: true })
-  fomacao: string;
+  formacao: string;
 
   @Column({ nullable: true })
   linkedin: string;

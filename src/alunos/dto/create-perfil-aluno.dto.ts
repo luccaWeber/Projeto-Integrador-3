@@ -1,5 +1,5 @@
 export class CreatePerfilAlunoDto {
   id_aluno: number;
-  fomacao?: string;
+  formacao?: string;
   areas_interesse?: string[];
 }

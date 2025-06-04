@@ -5,7 +5,7 @@ export class CreateMentorProfileDto {
   objetivos?: string;
   certificacoes?: any;
   experiencia_profissional?: string;
-  fomacao?: string;
+  formacao?: string;
   linkedin?: string;
   github?: string;
   portifolio?: string;

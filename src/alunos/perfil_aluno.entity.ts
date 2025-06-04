@@ -9,7 +9,7 @@ export class PerfilAluno {
   id_aluno: number;
 
   @Column({ nullable: true })
-  fomacao: string;
+  formacao: string;
 
   @Column('text', { array: true, nullable: true })
   areas_interesse: string[];
