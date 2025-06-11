@@ -24,11 +24,23 @@ export class Mentoria {
   @Column({ type: 'timestamp' })
   data_hora: Date;
 
+  @Column({ type: 'int8' })
+  hora: Date;
+
   @Column('decimal')
   preco: number;
 
   @Column()
   status: string;
+
+  @Column()
+  titulo: string;
+
+  @Column()
+  descricao: string;
+
+  @Column()
+  modalidade: string;
 
   @CreateDateColumn({ name: 'created_at' })
   created_at: Date;
