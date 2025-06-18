@@ -14,6 +14,7 @@ export class MentoriasService {
   async create(data: CreateMentoriaDto, mentorId: number) {
     const mentoria = this.mentoriasRepository.create({
       ...data,
+      created_at: new Date(),
       mentor: { id: mentorId },
       status: 'disponivel',
     });
@@ -23,33 +24,36 @@ export class MentoriasService {
 
   findAll() {
     return this.mentoriasRepository.find({
-      relations: ['mentor', 'aluno'],
+      relations: ['mentor'],
     });
+  }
+
+  findAllByMentorId(mentorId: number) {
+    return this.mentoriasRepository.findBy({ mentor: { id: mentorId } });
   }
 
   findOne(id: number) {
     return this.mentoriasRepository.findOne({
       where: { id },
-      relations: ['mentor', 'aluno'],
+      relations: ['mentor'],
     });
   }
 
-async assinarMentoria(id: number, alunoId: number) {
-  const mentoria = await this.mentoriasRepository.findOne({ where: { id } });
+  // async assinarMentoria(id: number, alunoId: number) {
+  //   const mentoria = await this.mentoriasRepository.findOne({ where: { id } });
 
-  if (!mentoria) {
-    throw new Error('Mentoria não encontrada');
-  }
+  //   if (!mentoria) {
+  //     throw new Error('Mentoria não encontrada');
+  //   }
 
-  if (mentoria.status !== 'disponivel') {
-    throw new Error('Mentoria não está disponível para assinatura');
-  }
+  //   if (mentoria.status !== 'disponivel') {
+  //     throw new Error('Mentoria não está disponível para assinatura');
+  //   }
 
-  mentoria.aluno = { id: alunoId } as any;
-  mentoria.status = 'assinada';
+  //   mentoria.status = 'assinada';
 
-  return this.mentoriasRepository.save(mentoria);
-}
+  //   return this.mentoriasRepository.save(mentoria);
+  // }
 
   remove(id: number) {
     return this.mentoriasRepository.delete(id);

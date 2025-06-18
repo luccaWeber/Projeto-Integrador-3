@@ -19,18 +19,6 @@ export class MentoriaResponseDto {
   };
 
   @ApiProperty({
-    description: 'Dados do aluno inscrito na mentoria (quando aplicável)',
-    type: Object,
-    nullable: true,
-    required: false,
-  })
-  aluno?: {
-    id: number;
-    nome: string;
-    email: string;
-  };
-
-  @ApiProperty({
     description: 'Data e hora da mentoria',
     example: '2024-01-15T14:30:00Z',
     type: Date,

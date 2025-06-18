@@ -17,10 +17,6 @@ export class Mentoria {
   @JoinColumn({ name: 'mentor_id' })
   mentor: Usuario;
 
-  @ManyToOne(() => Usuario, (usuario) => usuario.mentoriasComoAluno, { nullable: true })
-  @JoinColumn({ name: 'aluno_id' })
-  aluno: Usuario;
-
   @Column({ type: 'timestamp' })
   data_hora: Date;
 
@@ -40,7 +36,13 @@ export class Mentoria {
   descricao: string;
 
   @Column()
+  duracao: number;
+
+  @Column()
   modalidade: string;
+
+  @Column({ name: 'area_interesse' })
+  area: string;
 
   @CreateDateColumn({ name: 'created_at' })
   created_at: Date;

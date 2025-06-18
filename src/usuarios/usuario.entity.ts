@@ -1,5 +1,5 @@
 import { Mentoria } from 'src/mentorias/mentoria.entity';
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany} from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity('usuarios')
 export class Usuario {
@@ -32,8 +32,4 @@ export class Usuario {
 
   @OneToMany(() => Mentoria, (mentoria) => mentoria.mentor)
   mentoriasComoMentor: Mentoria[];
-
-  @OneToMany(() => Mentoria, (mentoria) => mentoria.aluno)
-  mentoriasComoAluno: Mentoria[];
-
 }
