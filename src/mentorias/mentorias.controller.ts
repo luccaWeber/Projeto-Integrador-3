@@ -8,6 +8,8 @@ import {
   UseGuards,
   Request,
   Patch,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -20,11 +22,18 @@ import { MentoriasService } from './mentorias.service';
 import { CreateMentoriaDto } from './dto/create-mentoria.dto';
 import { MentoriaResponseDto } from './dto/mentoria-response.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Usuario } from '../usuarios/usuario.entity';
 
 @ApiTags('Mentorias')
 @Controller('mentorias')
 export class MentoriasController {
-  constructor(private readonly mentoriasService: MentoriasService) {}
+  constructor(
+    private readonly mentoriasService: MentoriasService,
+    @InjectRepository(Usuario)
+    private readonly usuarioRepository: Repository<Usuario>,
+  ) {}
 
   @UseGuards(JwtAuthGuard)
   @Post()
@@ -96,6 +105,43 @@ export class MentoriasController {
   @ApiResponse({ status: 401, description: 'Token JWT inválido ou ausente' })
   findAllByMentorId(@Param('id') id: string) {
     return this.mentoriasService.findAllByMentorId(+id);
+  }
+
+  @Get('aluno/interesses')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('access-token')
+  @ApiOperation({
+    summary: 'Buscar mentorias por área de interesse do aluno',
+    description: 'Retorna as mentorias que correspondem às áreas de interesse do aluno logado.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Mentorias encontradas',
+    type: [MentoriaResponseDto],
+  })
+  @ApiResponse({ 
+    status: 403, 
+    description: 'Acesso negado. Apenas usuários do tipo aluno podem acessar esta rota.' 
+  })
+  @ApiResponse({ status: 401, description: 'Token JWT inválido ou ausente' })
+  async findByAlunoInterests(@Request() req) {
+    // Verificar se o usuário é do tipo aluno
+    const usuario = await this.usuarioRepository.findOne({
+      where: { id: req.user.id }
+    });
+
+    if (!usuario) {
+      throw new HttpException('Usuário não encontrado', HttpStatus.NOT_FOUND);
+    }
+
+    if (usuario.tipo_usuario !== 'aluno') {
+      throw new HttpException(
+        'Acesso negado. Apenas usuários do tipo aluno podem acessar esta rota.',
+        HttpStatus.FORBIDDEN
+      );
+    }
+
+    return this.mentoriasService.findByAlunoInterests(req.user.id);
   }
 
   // @Patch(':id/assinar')
